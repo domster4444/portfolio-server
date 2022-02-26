@@ -20,7 +20,7 @@ router.patch(
       if (detailExist) {
         //? is details already exist , already updated by user for 1st time ?
         if (detailExist.setUpForFirstTimeStatus === true) {
-          res.status(200).json({
+          return res.status(200).json({
             status: 'failed',
             message:
               'name, middle name, last name has already been set, cannot be updated twice',
@@ -30,7 +30,7 @@ router.patch(
 
       // ?  is the userName already exist ?
       if (userNameExist) {
-        res.status(200).json({
+        return res.status(200).json({
           status: 'failed',
           message: 'user name already exist , please use another user name',
         });
@@ -55,6 +55,7 @@ router.patch(
           });
         }
         console.log('user NameForm Updated__');
+        return 0;
       } else {
         // ? if dont exist, create the details
 
@@ -76,6 +77,7 @@ router.patch(
           });
         }
         console.log('user NameForm Updated__');
+        return 0;
       }
     }
     console.log(
@@ -84,6 +86,37 @@ router.patch(
     return res.status(404).json({
       message:
         'User not found , cannot update your details, first create account',
+    });
+  })
+);
+
+router.post(
+  '/nameform',
+  asyncHandler(async (req, res, next) => {
+    console.log('/nameform GET route has been hit__________');
+
+    console.log(req.body);
+
+    const { email } = req.body;
+    console.log(email);
+    console.log(email);
+    console.log(email);
+    console.log(email);
+    console.log(email);
+    const detailExist = await Detail.findOne({ email });
+
+    if (detailExist) {
+      console.log('nameFormData found');
+      return res.json({
+        status: 'success',
+        message: 'nameForm data found',
+        detailExist,
+      });
+    }
+    console.log('nameFormData not found');
+    return res.status(200).json({
+      status: 'failed',
+      message: 'nameForm data not found',
     });
   })
 );
@@ -110,7 +143,7 @@ router.patch(
         });
         if (createBioData) {
           console.log('nameFormData created');
-          res.json({
+          return res.json({
             status: 'success',
             message: 'user bioForm data has been updated ',
             createBioData,
@@ -125,7 +158,7 @@ router.patch(
         });
         if (createBioData) {
           console.log('nameFormData created');
-          res.json({
+          return res.json({
             status: 'success',
             message: 'user bioForm data has been created ',
             createBioData,
