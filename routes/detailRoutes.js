@@ -7,9 +7,38 @@ const router = express.Router();
 // ? get all details
 
 router.post(
+  '/themedetails',
+  asyncHandler(async (req, res, next) => {
+    console.log('/themedetails post route has been hit__________');
+
+    console.log(req.body);
+
+    const { userName } = req.body;
+
+    const detailExist = await Detail.findOne({ userName });
+
+    if (detailExist) {
+      console.log('nameFormData found');
+      return res.json({
+        status: 'success',
+        message: 'nameForm data found',
+        detailExist,
+      });
+    }
+    console.log('nameFormData not found');
+    return res.status(200).json({
+      status: 'failed',
+      message: 'nameForm data not found',
+    });
+  })
+);
+
+// ? get all details for UPDATE FIELDS OF FORM
+
+router.post(
   '/alldetails',
   asyncHandler(async (req, res, next) => {
-    console.log('/nameform GET route has been hit__________');
+    console.log('/alldetails post route has been hit__________');
 
     console.log(req.body);
 
@@ -37,7 +66,7 @@ router.post(
   })
 );
 
-// ? update user data
+// ? update nameForm data
 router.patch(
   '/nameform',
   asyncHandler(async (req, res, next) => {
@@ -127,7 +156,7 @@ router.patch(
   })
 );
 
-// ? update bio data
+// ? update bioForm data
 router.patch(
   '/bioform',
   asyncHandler(async (req, res, next) => {
@@ -179,6 +208,76 @@ router.patch(
             status: 'success',
             message: 'user bioForm data has been created ',
             createBioData,
+          });
+        }
+        console.log('user bioForm Updated__');
+      }
+    }
+    console.log(
+      '(trying to update details without creating account , accept policies & terms first )__'
+    );
+    return res.status(404).json({
+      message:
+        'User not found , cannot update your details, first create account',
+    });
+  })
+);
+
+// ? update contactForm data
+router.post(
+  '/contactform',
+  asyncHandler(async (req, res, next) => {
+    console.log('/contactform PATCH route has been hit__________');
+
+    console.log(req.body);
+
+    const { twitter, facebook, instagram, linkedin, github, website, email } =
+      req.body;
+    const user = await User.findOne({ email });
+    const detailExist = await Detail.findOne({ email });
+
+    // ? is account created (is terms & policy accepted  )
+    if (user) {
+      if (detailExist) {
+        const updateContactData = await Detail.findOneAndUpdate(
+          { email },
+          {
+            twitter,
+            facebook,
+            instagram,
+            linkedin,
+            github,
+            website,
+            email,
+          }
+        );
+
+        if (updateContactData) {
+          console.log(updateContactData);
+          console.log('nameFormData created');
+          return res.json({
+            status: 'success',
+            message: 'user bioForm data has been updated ',
+            updateContactData,
+          });
+        }
+        console.log('user bioForm Updated__');
+      } else {
+        const createContactData = await Detail.create({
+          twitter,
+          facebook,
+          instagram,
+          linkedin,
+          github,
+          website,
+          email,
+        });
+        if (createContactData) {
+          console.log('nameFormData created');
+          return res.json({
+            status: 'success',
+            message: 'user bioForm data has been created ',
+            createContactData,
           });
         }
         console.log('user bioForm Updated__');
