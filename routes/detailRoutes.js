@@ -4,6 +4,39 @@ const User = require('../model/userModel');
 const Detail = require('../model/detailsModel');
 const router = express.Router();
 
+// ? get all details
+
+router.post(
+  '/alldetails',
+  asyncHandler(async (req, res, next) => {
+    console.log('/nameform GET route has been hit__________');
+
+    console.log(req.body);
+
+    const { email } = req.body;
+    console.log(email);
+    console.log(email);
+    console.log(email);
+    console.log(email);
+    console.log(email);
+    const detailExist = await Detail.findOne({ email });
+
+    if (detailExist) {
+      console.log('nameFormData found');
+      return res.json({
+        status: 'success',
+        message: 'nameForm data found',
+        detailExist,
+      });
+    }
+    console.log('nameFormData not found');
+    return res.status(200).json({
+      status: 'failed',
+      message: 'nameForm data not found',
+    });
+  })
+);
+
 // ? update user data
 router.patch(
   '/nameform',
@@ -37,14 +70,18 @@ router.patch(
       }
       // ? if already exist, update the details
       if (detailExist) {
-        const createNameFormData = await Detail.update({
-          firstName,
-          lastName,
-          middleName,
-          email,
-          userName,
-          setUpForFirstTimeStatus: true,
-        });
+        const createNameFormData = await Detail.findOneAndUpdate(
+          { email },
+          {
+            firstName,
+            lastName,
+            middleName,
+            email,
+            userName,
+            setUpForFirstTimeStatus: true,
+          }
+        );
+
         if (createNameFormData) {
           console.log('nameFormData created');
           res.json({
@@ -90,37 +127,6 @@ router.patch(
   })
 );
 
-router.post(
-  '/nameform',
-  asyncHandler(async (req, res, next) => {
-    console.log('/nameform GET route has been hit__________');
-
-    console.log(req.body);
-
-    const { email } = req.body;
-    console.log(email);
-    console.log(email);
-    console.log(email);
-    console.log(email);
-    console.log(email);
-    const detailExist = await Detail.findOne({ email });
-
-    if (detailExist) {
-      console.log('nameFormData found');
-      return res.json({
-        status: 'success',
-        message: 'nameForm data found',
-        detailExist,
-      });
-    }
-    console.log('nameFormData not found');
-    return res.status(200).json({
-      status: 'failed',
-      message: 'nameForm data not found',
-    });
-  })
-);
-
 // ? update bio data
 router.patch(
   '/bioform',
@@ -136,12 +142,23 @@ router.patch(
     // ? is account created (is terms & policy accepted  )
     if (user) {
       if (detailExist) {
-        const createBioData = await Detail.update({
-          profilePhoto,
-          bio,
-          email,
-        });
+        const createBioData = await Detail.findOneAndUpdate(
+          { email },
+          {
+            profilePhoto,
+            bio,
+            email,
+          }
+        );
+
+        console.log(bio);
+        console.log(bio);
+        console.log(bio);
+        console.log(bio);
+        console.log(bio);
+        console.log(bio);
         if (createBioData) {
+          console.log(createBioData);
           console.log('nameFormData created');
           return res.json({
             status: 'success',

@@ -61,10 +61,16 @@ app.post('/api/upload', async (req, res) => {
             'cloudinary image object as response after upload to cloudinary'
           );
           console.log(result);
+          console.log(result.url);
+          console.log(result.url);
+          console.log(result.url);
+          console.log(result.url);
+          console.log(result.url);
+          console.log(result.url);
           //! ------SERVER GETS "IMAGE ID OBJ" FROM CLOUDINARY . store that to access later
-          res.status(200).json({
+          return res.status(200).json({
             message: 'File uploaded successfully',
-            result,
+            url: result.url,
           });
         }
       }
