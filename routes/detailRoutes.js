@@ -257,11 +257,11 @@ router.post(
           console.log('nameFormData created');
           return res.json({
             status: 'success',
-            message: 'user bioForm data has been updated ',
+            message: 'user contact data has been updated ',
             updateContactData,
           });
         }
-        console.log('user bioForm Updated__');
+        console.log('user contact data Updated__');
       } else {
         const createContactData = await Detail.create({
           twitter,
@@ -276,11 +276,75 @@ router.post(
           console.log('nameFormData created');
           return res.json({
             status: 'success',
-            message: 'user bioForm data has been created ',
+            message: 'user contact data has been created ',
             createContactData,
           });
         }
         console.log('user bioForm Updated__');
+      }
+    }
+    console.log(
+      '(trying to update details without creating account , accept policies & terms first )__'
+    );
+    return res.status(404).json({
+      message:
+        'User not found , cannot update your details, first create account',
+    });
+  })
+);
+
+router.patch(
+  '/skillsform',
+  asyncHandler(async (req, res, next) => {
+    console.log('/skillsform PATCH route has been hit__________');
+
+    const { email, skillName, skillLevel } = req.body;
+    const user = await User.findOne({ email });
+    const detailExist = await Detail.findOne({ email });
+
+    // ? is account created (is terms & policy accepted  )
+    if (user) {
+      if (detailExist) {
+        const newArray = [...detailExist.skills, { skillName, skillLevel }];
+
+        // check if skill already exist
+        for (let i = 0; i < detailExist.skills.length; i++) {
+          if (detailExist.skills[i].skillName === skillName) {
+            console.log('skill already exist');
+            return res.status(404).json({
+              message: 'skill already exist',
+            });
+          }
+        }
+        // update skills
+        const updateSkillsData = await Detail.findOneAndUpdate(
+          { email },
+          {
+            skills: newArray,
+          }
+        );
+        // response on successful update
+        if (updateSkillsData) {
+          console.log('skills data updated');
+          return res.json({
+            status: 'success',
+            message: 'user skills data has been updated ',
+            updateSkillsData,
+          });
+        }
+      } else {
+        const createSkillsData = await Detail.create({
+          email,
+          skills: [{ skillName, skillLevel }],
+        });
+        if (createSkillsData) {
+          console.log('nameFormData created');
+          return res.json({
+            status: 'success',
+            message: 'user skills data has been created ',
+            createSkillsData,
+          });
+        }
       }
     }
     console.log(

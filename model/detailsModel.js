@@ -126,9 +126,10 @@ const detailsSchema = new mongoose.Schema({
         default: '',
         optional: true,
       },
-      rate: {
-        type: Number,
-        default: 100,
+      skillLevel: {
+        type: String,
+
+        default: '',
         optional: true,
       },
     },
