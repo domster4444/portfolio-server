@@ -292,7 +292,7 @@ router.post(
     });
   })
 );
-
+// ! UPDATE SKILLS
 router.patch(
   '/skillsform',
   asyncHandler(async (req, res, next) => {
@@ -343,6 +343,145 @@ router.patch(
             status: 'success',
             message: 'user skills data has been created ',
             createSkillsData,
+          });
+        }
+      }
+    }
+    console.log(
+      '(trying to update details without creating account , accept policies & terms first )__'
+    );
+    return res.status(404).json({
+      message:
+        'User not found , cannot update your details, first create account',
+    });
+  })
+);
+// ! UPDATE EDUCCATION
+
+router.patch(
+  '/educationform',
+  asyncHandler(async (req, res, next) => {
+    console.log('/educationform PATCH route has been hit__________');
+
+    const { email, organizationName, dateOfJoining, dateOfLeaving } = req.body;
+    const user = await User.findOne({ email });
+    const detailExist = await Detail.findOne({ email });
+
+    // ? is account created (is terms & policy accepted  )
+    if (user) {
+      if (detailExist) {
+        const newArray = [
+          ...detailExist.education,
+          { organizationName, dateOfJoining, dateOfLeaving },
+        ];
+
+        // check if skill already exist
+        for (let i = 0; i < detailExist.education.length; i++) {
+          if (detailExist.education[i].organizationName === organizationName) {
+            console.log('organization name already exist');
+            return res.status(404).json({
+              message: 'organization name already exist',
+            });
+          }
+        }
+        // update education
+        const updateEducationData = await Detail.findOneAndUpdate(
+          { email },
+          {
+            education: newArray,
+          }
+        );
+        // response on successful update
+        if (updateEducationData) {
+          console.log('education data updated');
+          return res.json({
+            status: 'success',
+            message: 'user education data has been updated ',
+            updateEducationData,
+          });
+        }
+      } else {
+        const createEducationData = await Detail.create({
+          email,
+          education: [{ organizationName, dateOfJoining, dateOfLeaving }],
+        });
+        if (createEducationData) {
+          console.log('nameFormData created');
+          return res.json({
+            status: 'success',
+            message: 'user education data has been created ',
+            createEducationData,
+          });
+        }
+      }
+    }
+    console.log(
+      '(trying to update details without creating account , accept policies & terms first )__'
+    );
+    return res.status(404).json({
+      message:
+        'User not found , cannot update your details, first create account',
+    });
+  })
+);
+
+// ! UPDATE WORK
+router.patch(
+  '/workform',
+  asyncHandler(async (req, res, next) => {
+    console.log('/workform PATCH route has been hit__________');
+
+    const { email, companyName, destination, dateOfJoining, workDescription } =
+      req.body;
+    const user = await User.findOne({ email });
+    const detailExist = await Detail.findOne({ email });
+
+    // ? is account created (is terms & policy accepted  )
+    if (user) {
+      if (detailExist) {
+        const newArray = [
+          ...detailExist.workExperience,
+          { companyName, destination, dateOfJoining, workDescription },
+        ];
+
+        // check if skill already exist
+        for (let i = 0; i < detailExist.workExperience.length; i++) {
+          if (detailExist.workExperience[i].companyName === companyName) {
+            console.log('company name already exist');
+            return res.status(404).json({
+              message: 'company name already exist',
+            });
+          }
+        }
+        // update skills
+        const updateWorkExperienceData = await Detail.findOneAndUpdate(
+          { email },
+          {
+            workExperience: newArray,
+          }
+        );
+        // response on successful update
+        if (updateWorkExperienceData) {
+          console.log('skills data updated');
+          return res.json({
+            status: 'success',
+            message: 'user work experience data has been updated ',
+            updateWorkExperienceData,
+          });
+        }
+      } else {
+        const createWorkExperienceData = await Detail.create({
+          email,
+          workExperience: [
+            { companyName, destination, dateOfJoining, workDescription },
+          ],
+        });
+        if (createWorkExperienceData) {
+          console.log('nameFormData created');
+          return res.json({
+            status: 'success',
+            message: 'user skills data has been created ',
+            createWorkExperienceData,
           });
         }
       }

@@ -83,6 +83,7 @@ const detailsSchema = new mongoose.Schema({
       organizationName: {
         type: String,
         default: '',
+        unique: true,
         optional: true,
       },
       dateOfJoining: {
@@ -105,12 +106,18 @@ const detailsSchema = new mongoose.Schema({
         default: '',
         optional: true,
       },
-      designation: {
+      destination: {
         type: String,
         default: '',
         optional: true,
       },
       dateOfJoining: {
+        type: String,
+
+        default: '',
+        optional: true,
+      },
+      workDescription: {
         type: String,
 
         default: '',
