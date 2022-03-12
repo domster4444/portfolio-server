@@ -496,4 +496,169 @@ router.patch(
   })
 );
 
+// ! update Achievements
+
+router.patch(
+  '/achievementform',
+  asyncHandler(async (req, res, next) => {
+    console.log('/acievement form PATCH route has been hit__________');
+
+    const { email, achievementImage, achievementName, achievementDescription } =
+      req.body;
+    const user = await User.findOne({ email });
+    const detailExist = await Detail.findOne({ email });
+
+    // ? is account created (is terms & policy accepted  )
+    if (user) {
+      if (detailExist) {
+        // * *** **if detail exist then just update .... .... ...
+        const newArray = [
+          ...detailExist.achievements,
+          { achievementImage, achievementName, achievementDescription },
+        ];
+
+        // check if skill already exist
+        for (let i = 0; i < detailExist.achievements.length; i++) {
+          if (detailExist.achievements[i].achievementName === achievementName) {
+            return res.status(404).json({
+              message: 'achievementName  name already exist',
+            });
+          }
+        }
+        // update skills
+        const updateAchievemetData = await Detail.findOneAndUpdate(
+          { email },
+          {
+            achievements: newArray,
+          }
+        );
+        // response on successful update
+        if (updateAchievemetData) {
+          return res.json({
+            status: 'success',
+            message: 'achievement data has been updated ',
+            updateAchievemetData,
+          });
+        }
+      } else {
+        const createAchievementData = await Detail.create({
+          email,
+          achievements: [
+            { achievementImage, achievementName, achievementDescription },
+          ],
+        });
+        if (createAchievementData) {
+          console.log('nameFormData created');
+          return res.json({
+            status: 'success',
+            message: 'achievement data has been created ',
+            createAchievementData,
+          });
+        }
+      }
+    }
+    console.log(
+      '(trying to update details without creating account , accept policies & terms first )__'
+    );
+    return res.status(404).json({
+      message:
+        'User not found , cannot update your details, first create account',
+    });
+  })
+);
+
+// ! UPDATE Project
+router.patch(
+  '/projectform',
+  asyncHandler(async (req, res, next) => {
+    console.log('/project form PATCH route has been hit__________');
+
+    const {
+      email,
+      projectName,
+      projectDescription,
+      projectImage,
+      projectVideoLink,
+      projectGithubLink,
+      projectWebsiteLink,
+      projectDocLink,
+    } = req.body;
+    const user = await User.findOne({ email });
+    const detailExist = await Detail.findOne({ email });
+
+    // ? is account created (is terms & policy accepted  )
+    if (user) {
+      if (detailExist) {
+        // * *** **if detail exist then just update .... .... ...
+        const newArray = [
+          ...detailExist.projects,
+          {
+            projectName,
+            projectDescription,
+            projectImage,
+            projectVideoLink,
+            projectGithubLink,
+            projectWebsiteLink,
+            projectDocLink,
+          },
+        ];
+
+        // check if project already exist
+        for (let i = 0; i < detailExist.projects.length; i++) {
+          if (detailExist.projects[i].projectName === projectName) {
+            return res.status(404).json({
+              message: 'project  name already exist',
+            });
+          }
+        }
+        // update skills
+        const updateProjectData = await Detail.findOneAndUpdate(
+          { email },
+          {
+            projects: newArray,
+          }
+        );
+        // response on successful update
+        if (updateProjectData) {
+          return res.json({
+            status: 'success',
+            message: 'project data has been updated ',
+            updateProjectData,
+          });
+        }
+      } else {
+        const createProjectData = await Detail.create({
+          email,
+          projects: [
+            {
+              projectName,
+              projectDescription,
+              projectImage,
+              projectVideoLink,
+              projectGithubLink,
+              projectWebsiteLink,
+              projectDocLink,
+            },
+          ],
+        });
+        if (createProjectData) {
+          console.log('project data created');
+          return res.json({
+            status: 'success',
+            message: 'project data has been created ',
+            createProjectData,
+          });
+        }
+      }
+    }
+    console.log(
+      '(trying to update details without creating account , accept policies & terms first )__'
+    );
+    return res.status(404).json({
+      message:
+        'User not found , cannot update your details, first create account',
+    });
+  })
+);
+
 module.exports = router;
