@@ -10,6 +10,7 @@ const passport = require('passport');
 const authRoute = require('./routes/auth');
 const userRoutes = require('./routes/userRoutes');
 const detailRoutes = require('./routes/detailRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 dotenv.config();
 // connect to the database
 connectDB(); //? connect db
@@ -84,6 +85,7 @@ app.post('/api/upload', async (req, res) => {
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/users', detailRoutes);
 // app.use('/account', passwordResetRoutes);
+app.use('/api/v1', paymentRoutes);
 
 // TODO: auth
 // app.use('/auth', authRoute);

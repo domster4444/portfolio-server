@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -48,6 +48,26 @@ const userSchema = new mongoose.Schema({
     default: '',
     optional: true,
   },
+  middleName: {
+    type: String,
+    default: '',
+    optional: true,
+  },
+  organizationName: {
+    type: String,
+    default: '',
+    optional: true,
+  },
+  age: {
+    type: Number,
+    default: 0,
+    optional: true,
+  },
+  country: {
+    type: String,
+    default: '',
+    optional: true,
+  },
 
   contactNumber: {
     type: String,
@@ -60,11 +80,6 @@ const userSchema = new mongoose.Schema({
     optional: true,
   },
   city: {
-    type: String,
-    default: '',
-    optional: true,
-  },
-  zipCode: {
     type: String,
     default: '',
     optional: true,

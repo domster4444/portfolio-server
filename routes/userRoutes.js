@@ -60,12 +60,15 @@ router.get(
 );
 
 //? get user AAccount Data by email
-router.get(
+router.post(
   '/accountdata',
   asyncHandler(async (req, res, next) => {
-    const { email } = req.body;
-    console.log('req body' + req.body);
+    console.log('accountdata route get called++++++++++++++++++++++++++');
+    const { email } = req.body.data;
+    console.log('req.body:-');
     console.log(req.body);
+    console.log('req.body.data:-');
+    console.log(req.body.data);
 
     const user = await User.findOne({ email });
     console.log(user);
@@ -76,7 +79,7 @@ router.get(
       });
     }
 
-    return res.status(404).json({
+    return res.status(500).json({
       message: 'User not found',
     });
   })
@@ -149,21 +152,25 @@ router.patch(
     const {
       firstName,
       lastName,
+      middleName,
       email,
       contactNumber,
-      address,
       city,
-      zipCode,
+      country,
+      age,
+      organizationName,
     } = req.body;
     const user = await User.findOne({ email });
     if (user) {
       user.firstName = firstName;
       user.lastName = lastName;
+      user.middleName = middleName;
       user.email = email;
+      user.organizationName = organizationName;
       user.contactNumber = contactNumber;
-      user.address = address;
+      user.country = country;
+      user.age = age;
       user.city = city;
-      user.zipCode = zipCode;
       await user.save();
       res.status(200).json({
         message: 'User updated',

@@ -1,7 +1,10 @@
 const router = require('express').Router();
 const passport = require('passport');
+
+// import
+
 //!!__________URRL REDIRECT AFTER SUCCESS
-const Client_URL = 'http://localhost:3000';
+const Client_URL = 'https://www.hexgrade.com';
 router.get(
   '/login/failed',
 
