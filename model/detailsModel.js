@@ -33,6 +33,10 @@ const detailsSchema = new mongoose.Schema({
       'https://i.pinimg.com/564x/74/46/9b/74469bd23df16c22231fcf75b7073fd2.jpg',
     optional: true,
   },
+  secondaryPicture: {
+    type: String,
+    optional: true,
+  },
   profilePhotoUpdateCount: {
     type: Number,
     default: 0,

@@ -19,11 +19,10 @@ const userSchema = new mongoose.Schema({
 
   picture: {
     type: String,
-    default:
-      'https://i.pinimg.com/564x/74/46/9b/74469bd23df16c22231fcf75b7073fd2.jpg',
+    // default:
+    //   'https://i.pinimg.com/564x/74/46/9b/74469bd23df16c22231fcf75b7073fd2.jpg',
     optional: true,
   },
-
   // ??  optional fields
 
   role: {
@@ -82,6 +81,11 @@ const userSchema = new mongoose.Schema({
   city: {
     type: String,
     default: '',
+    optional: true,
+  },
+  expiryDate: {
+    type: Date,
+    default: Date.now + 60 * 60 * 24 * 30,
     optional: true,
   },
 });

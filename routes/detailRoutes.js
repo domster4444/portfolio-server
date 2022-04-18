@@ -661,4 +661,66 @@ router.patch(
   })
 );
 
+// ? submit secondaryImage forrm
+
+// ? update bioForm data
+router.patch(
+  '/secondaryimg',
+  asyncHandler(async (req, res, next) => {
+    console.log('/secondaryImage PATCH route has been hit__________');
+
+    console.log(req.body);
+
+    const { secondaryPicture, email } = req.body;
+    const user = await User.findOne({ email });
+    const detailExist = await Detail.findOne({ email });
+
+    // ? is account created (is terms & policy accepted  )
+    if (user) {
+      if (detailExist) {
+        const alreadyCreatedSecondaryForm = await Detail.findOneAndUpdate(
+          { email },
+          {
+            secondaryPicture,
+            email,
+          }
+        );
+        //? iif updated successfully
+        if (alreadyCreatedSecondaryForm) {
+          console.log(alreadyCreatedSecondaryForm);
+          console.log('secondaryPictureForm created');
+          return res.json({
+            status: 'success',
+            message: 'user secondaryPicture Form data has been updated ',
+            alreadyCreatedSecondaryForm,
+          });
+        }
+        console.log('user bioForm Updated__');
+      } else {
+        const newlyCreatedSecondaryForm = await Detail.create({
+          secondaryPicture,
+          email,
+        });
+        // ? if created successfully
+        if (newlyCreatedSecondaryForm) {
+          console.log('secondaryPictureForm Data created');
+          return res.json({
+            status: 'success',
+            message: 'user secondaryPictureForm Data data has been created ',
+            newlyCreatedSecondaryForm,
+          });
+        }
+        console.log('user secondaryPictureForm Data Updated__');
+      }
+    }
+    console.log(
+      '(trying to update details without creating account , accept policies & terms first )__'
+    );
+    return res.status(404).json({
+      message:
+        'User not found , cannot update your details, first create account',
+    });
+  })
+);
+
 module.exports = router;
