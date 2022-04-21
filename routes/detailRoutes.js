@@ -164,7 +164,13 @@ router.patch(
 
     console.log(req.body);
 
-    const { profilePhoto, bio, email } = req.body;
+    const {
+      profilePhoto,
+      bio,
+      email,
+      yearsOfExperience,
+      noOfCompletedProjects,
+    } = req.body;
     const user = await User.findOne({ email });
     const detailExist = await Detail.findOne({ email });
 
@@ -175,8 +181,11 @@ router.patch(
           { email },
           {
             profilePhoto,
+            // bio form's text area data
             bio,
             email,
+            yearsOfExperience,
+            noOfCompletedProjects,
           }
         );
 

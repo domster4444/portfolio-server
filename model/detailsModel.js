@@ -185,7 +185,16 @@ const detailsSchema = new mongoose.Schema({
       },
     },
   ],
-
+  yearsOfExperience: {
+    type: Number,
+    default: null,
+    optional: true,
+  },
+  noOfCompletedProjects: {
+    type: Number,
+    default: null,
+    optional: true,
+  },
   achievements: [
     {
       achievementName: {
