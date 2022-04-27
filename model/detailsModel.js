@@ -215,5 +215,5 @@ const detailsSchema = new mongoose.Schema({
     },
   ],
 });
-const Details = mongoose.model('Details', detailsSchema);
+const Details = mongoose.model('details', detailsSchema);
 module.exports = Details;

@@ -5,22 +5,22 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
-    required: true,
+    optional: true,
   },
 
   sub: {
     type: String,
-    required: true,
+    optional: true,
   },
   nickName: {
     type: String,
-    required: true,
+    optional: true,
   },
 
   picture: {
     type: String,
-    // default:
-    //   'https://i.pinimg.com/564x/74/46/9b/74469bd23df16c22231fcf75b7073fd2.jpg',
+    default:
+      'https://i.pinimg.com/564x/74/46/9b/74469bd23df16c22231fcf75b7073fd2.jpg',
     optional: true,
   },
   // ??  optional fields
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'user',
     enum: ['user', 'admin'],
-    optional: 'true',
+    optional: true,
   },
 
   accountType: {
@@ -84,11 +84,11 @@ const userSchema = new mongoose.Schema({
     optional: true,
   },
   expiryDate: {
-    type: Date,
-    default: Date.now + 60 * 60 * 24 * 30,
-    optional: true,
+    // type: Date,
+    // default: Date.now + 60 * 60 * 24 * 30,
+    // optional: true,
   },
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('users', userSchema);
 module.exports = User;
